@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dhamma map</title>
+<style>
+:root{
+  --ink:#2E2A26;
+  --muted:#6B635A;
+  --page:#FBF8F2;
+  --rule:#DED5C6;
+
+  --pink-bg:#FBEAF0; --pink-line:#B8496E; --pink-ink:#7A2440;
+  --rust-bg:#FAECE7; --rust-line:#B34A24; --rust-ink:#7A2E14;
+  --violet-bg:#EEEDFE; --violet-line:#6C63E8; --violet-ink:#3C3489;
+  --blue-bg:#E6F1FB; --blue-line:#2C7BC4; --blue-ink:#0C447C;
+  --green-bg:#EAF3DE; --green-line:#5FA524; --green-ink:#27500A;
+  --amber-bg:#FAEEDA; --amber-line:#C58A24; --amber-ink:#633806;
+  --teal-bg:#E1F5EE; --teal-line:#12A87F; --teal-ink:#085041;
+  --red:#C0392B; --red-soft:#F2B3A6; --red-bg:#FBEAE7;
+}
+*{box-sizing:border-box}
+html,body{overscroll-behavior-x:contain}
+html{-webkit-text-size-adjust:100%}
+body{
+  touch-action:pan-y;
+  margin:0; padding:28px 18px 64px;
+  background:var(--page); color:var(--ink);
+  font:16px/1.5 "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+}
+.wrap{max-width:640px;margin:0 auto; overscroll-behavior-x:contain}
+
+/* ---------- masthead ---------- */
+.masthead{
+  border:1px solid var(--amber-line); background:var(--amber-bg);
+  border-radius:14px; padding:18px 16px 16px;
+  display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:12px;
+}
+.masthead h1{
+  margin:0; font-size:clamp(26px,7vw,38px); font-weight:600;
+  letter-spacing:.01em; color:var(--amber-ink); text-align:center; line-height:1.05;
+}
+.masthead p{
+  margin:6px 0 0; text-align:center; color:#8A5A12;
+  font-size:14px; letter-spacing:.02em;
+}
+.masthead h1::after{
+  content:""; display:block; width:92px; height:1px;
+  background:var(--amber-line); margin:9px auto 0; opacity:.7;
+}
+.lotus{width:52px;height:34px;display:block}
+
+/* ---------- flow ---------- */
+.section{
+  border:1px solid; border-radius:13px; padding:15px 17px 16px;
+}
+.section h2{
+  margin:0; font-size:19px; font-weight:600; letter-spacing:.005em;
+}
+.section .pali{
+  margin:2px 0 11px; font-size:13.5px; font-style:italic; opacity:.85;
+}
+.section ul{margin:0; padding:0; list-style:none}
+.section li{padding:3px 0; font-size:15px}
+
+.marks{background:var(--pink-bg); border-color:var(--pink-line); color:var(--pink-ink)}
+.truths{background:var(--rust-bg); border-color:var(--rust-line); color:var(--rust-ink)}
+.fruits{background:var(--teal-bg); border-color:var(--teal-line); color:var(--teal-ink)}
+
+/* arrows */
+.arrow{display:block;margin:9px auto;width:26px;height:26px}
+
+/* ---------- path group ---------- */
+.path{
+  border:1px dashed var(--violet-line); border-radius:15px;
+  padding:15px 13px 16px; background:rgba(238,237,254,.34);
+}
+.path>header{text-align:center;margin-bottom:13px}
+.path>header h2{margin:0;font-size:20px;font-weight:600;color:var(--violet-ink)}
+.path>header p{margin:3px 0 0;font-size:13px;font-style:italic;color:var(--violet-line)}
+
+.wisdom{background:var(--violet-bg);border-color:var(--violet-line);color:var(--violet-ink)}
+.aggregates{background:var(--blue-bg);border-color:var(--blue-line);color:var(--blue-ink)}
+.conduct{background:var(--green-bg);border-color:var(--green-line);color:var(--green-ink)}
+.precepts{background:#E4EFCB;border-color:#4E7F19;color:#1F4205}
+.calm{background:var(--blue-bg);border-color:var(--blue-line);color:var(--blue-ink)}
+.hindrances{background:var(--amber-bg);border-color:var(--amber-line);color:var(--amber-ink)}
+
+/* ---------- flip cards ---------- */
+.flip{perspective:1400px; margin-bottom:13px}
+.flip:last-child{margin-bottom:0}
+.flip .faces{position:relative; height:100%; transform-style:preserve-3d;
+  transition:transform .55s cubic-bezier(.2,.7,.3,1);}
+.flip.open .faces{transform:rotateY(180deg)}
+.flip .face{
+  position:absolute; inset:0; overflow:hidden;
+  border:1px solid; border-radius:13px; padding:15px 17px 16px;
+  backface-visibility:hidden; -webkit-backface-visibility:hidden;
+}
+.flip .back{transform:rotateY(180deg)}
+.flip h2{margin:0; font-size:19px; font-weight:600; letter-spacing:.005em}
+.flip .pali{margin:2px 0 11px; font-size:13.5px; font-style:italic; opacity:.85}
+.flip ul{margin:0; padding:0; list-style:none}
+.flip li{padding:3px 0; font-size:15px}
+
+.front{display:grid; grid-template-columns:1fr auto; gap:12px; align-items:center; height:100%}
+.flipto{
+  display:flex; align-items:center; gap:10px;
+  background:none; border:0; padding:8px 2px; font:inherit; color:inherit;
+  cursor:pointer; border-radius:9px; max-width:170px;
+}
+.flipto svg{width:30px;height:30px;flex:none}
+.flipto span{
+  font-size:17px; font-weight:600; text-align:left; line-height:1.2;
+  border-bottom:1.5px dotted currentColor; padding-bottom:1px;
+}
+.flipto:hover span,.flipto:focus-visible span{border-bottom-style:solid}
+.flipto:focus-visible{outline:2px solid currentColor; outline-offset:2px}
+
+.back .backbtn{
+  position:absolute; top:12px; right:14px;
+  background:none; border:0; padding:4px; color:inherit; opacity:.55;
+  cursor:pointer; font:inherit; display:flex; align-items:center; gap:5px;
+  font-size:12.5px; font-style:italic;
+}
+.back .backbtn:hover,.back .backbtn:focus-visible{opacity:1}
+.back .backbtn svg{width:14px;height:14px}
+@media (prefers-reduced-motion:reduce){.flip .faces{transition:none}}
+@media (max-width:520px){
+  .front{grid-template-columns:1fr; gap:4px}
+  .flipto{padding-left:0}
+}
+
+
+/* ---------- works group ---------- */
+.works{
+  border:1px dashed var(--rust-line); border-radius:15px;
+  padding:15px 13px 16px; background:rgba(250,236,231,.38); margin-top:2px;
+}
+.works>header{text-align:center;margin-bottom:13px}
+.works>header h2{margin:0;font-size:20px;font-weight:600;color:var(--rust-ink)}
+.works>header p{margin:3px 0 0;font-size:13px;font-style:italic;color:var(--rust-line)}
+.works .section{margin-bottom:12px}
+.works .section:last-child{margin-bottom:0}
+.works .flip{margin-bottom:0}
+.roots{background:#FBEAE7;border-color:#B03A2E;color:#7A2015}
+.fetters{background:var(--pink-bg);border-color:var(--pink-line);color:var(--pink-ink)}
+.bvihara{background:#E4EFCB;border-color:#4E7F19;color:#1F4205}
+.stage{
+  float:right; font-size:11.5px; font-style:italic; opacity:.7;
+  white-space:nowrap; margin-left:10px;
+}
+.fetters li{clear:both}
+
+
+/* ---------- enemies (three-column back) ---------- */
+.enemies{
+  display:grid; grid-template-columns:1.05fr 1.35fr 1fr;
+  gap:0 12px; margin:0; padding:0; list-style:none;
+}
+.enemies .hd{
+  font-size:11px; font-style:italic; opacity:.68; letter-spacing:.02em;
+  padding-bottom:3px; margin-bottom:4px; border-bottom:1px solid currentColor;
+}
+.enemies li{padding:4px 0; font-size:13px; line-height:1.3}
+.enemies .q{font-weight:600}
+@media (max-width:520px){
+  .enemies{gap:0 8px}
+  .enemies li{font-size:11.5px}
+  .enemies .hd{font-size:10px}
+}
+
+/* ---------- goal ---------- */
+.goal{
+  margin:0 auto; max-width:290px; text-align:center;
+  border:1px solid var(--violet-line); background:var(--violet-bg);
+  color:var(--violet-ink); border-radius:999px; padding:13px 20px;
+}
+.goal strong{display:block;font-size:19px;font-weight:600}
+.goal span{font-size:13.5px;font-style:italic;opacity:.85}
+.bloom{display:block;margin:10px auto 12px;width:96px;height:56px}
+
+/* ---------- hoverable terms ---------- */
+.t{
+  cursor:help; border-bottom:1px dotted currentColor;
+  text-decoration:none; color:inherit; background:none;
+  border-left:0;border-right:0;border-top:0; padding:0; font:inherit;
+}
+.t:focus-visible{outline:2px solid var(--ink); outline-offset:2px; border-radius:2px}
+
+#tip{
+  position:fixed; z-index:50; max-width:320px; pointer-events:none;
+  background:#332F2A; color:#F6F1E8; border-radius:9px;
+  padding:10px 13px; font-size:14px; line-height:1.45;
+  box-shadow:0 8px 26px rgba(40,32,20,.28);
+  opacity:0; transform:translateY(4px); transition:opacity .12s ease, transform .12s ease;
+}
+#tip.on{opacity:1; transform:translateY(0)}
+#tip b{display:block; font-size:14.5px; margin-bottom:3px; color:#F4D8A8; font-weight:600}
+#tip i{font-style:italic; opacity:.82}
+
+
+/* ---------- pages & nav ---------- */
+.pages{position:relative; overflow:hidden}
+.page{display:none}
+.page.on{display:block}
+.page.anim{
+  animation:slidein .32s cubic-bezier(.22,.7,.3,1) both;
+}
+@keyframes slidein{
+  from{opacity:0; transform:translateX(var(--from))}
+  to{opacity:1; transform:translateX(0)}
+}
+.page.leaving{
+  display:block; position:absolute; inset:0 0 auto 0;
+  animation:slideout .28s cubic-bezier(.5,0,.75,.4) both; pointer-events:none;
+}
+@keyframes slideout{
+  from{opacity:1; transform:translateX(0)}
+  to{opacity:0; transform:translateX(var(--to))}
+}
+.pages.dragging .page.on{transition:none}
+.page.drag{will-change:transform}
+@media (prefers-reduced-motion:reduce){
+  .page.anim,.page.leaving{animation:none}
+}
+.nav{
+  display:flex; justify-content:space-between; align-items:center; gap:12px;
+  margin:30px auto 0; padding-top:18px; border-top:1px solid var(--rule);
+}
+.nav .pageno{font-size:13px; color:var(--muted); font-style:italic}
+.navbtn{
+  display:inline-flex; align-items:center; gap:8px;
+  font:inherit; font-size:15px; cursor:pointer;
+  background:var(--amber-bg); color:var(--amber-ink);
+  border:1px solid var(--amber-line); border-radius:999px;
+  padding:10px 18px;
+}
+.navbtn:hover{background:#F6E3C2}
+.navbtn:focus-visible{outline:2px solid var(--amber-ink); outline-offset:2px}
+.navbtn svg{width:14px;height:14px}
+.navbtn.ghost{background:none;border-color:var(--rule);color:var(--muted)}
+.navbtn.ghost:hover{background:#F2EDE3}
+
+/* ---------- page 2 ---------- */
+.links{
+  display:grid; grid-template-columns:1fr 1fr; gap:8px 14px; margin:0;
+  padding:0; list-style:none; counter-reset:none;
+}
+.links li{
+  border:1px solid var(--violet-line); background:#fff; color:var(--violet-ink);
+  border-radius:8px; padding:8px 10px; font-size:13.5px; line-height:1.3;
+}
+.links li.key{background:#FAECE7; border-color:var(--rust-line); color:var(--rust-ink)}
+.links li .n{opacity:.55; font-size:12px; margin-right:4px}
+.chain{
+  background:rgba(238,237,254,.34); border:1px solid var(--violet-line);
+  border-radius:13px; padding:15px 17px 16px; color:var(--violet-ink);
+}
+.chain h2{margin:0;font-size:19px;font-weight:600}
+.chain .pali{margin:2px 0 13px;font-size:13.5px;font-style:italic;opacity:.85}
+.chain .loop{
+  margin:13px 0 0; font-size:13.5px; font-style:italic; line-height:1.5;
+}
+.kamma{background:var(--blue-bg);border-color:var(--blue-line);color:var(--blue-ink)}
+.marks2{background:var(--pink-bg);border-color:var(--pink-line);color:var(--pink-ink)}
+.closing{
+  margin:0 auto; max-width:340px; text-align:center;
+  border:1px solid var(--teal-line); background:var(--teal-bg);
+  color:var(--teal-ink); border-radius:999px; padding:13px 20px;
+}
+.closing strong{display:block;font-size:18px;font-weight:600}
+.closing span{font-size:13.5px;font-style:italic;opacity:.85}
+@media (max-width:520px){ .links{grid-template-columns:1fr} }
+
+.legend{
+  margin:22px auto 0; text-align:center;
+  font-size:13px; color:var(--muted); font-style:italic;
+}
+.hint{
+  margin:0 auto 20px; text-align:center; font-size:13px; color:var(--muted);
+}
+
+@media (max-width:520px){
+  .pair{grid-template-columns:1fr; gap:0}
+  .joint{padding:7px 0 3px; transform:rotate(90deg)}
+  .pair .section{margin-bottom:0}
+  #tip{max-width:min(320px,88vw)}
+}
+@media (prefers-reduced-motion:reduce){
+  #tip{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <svg class="lotus" viewBox="0 0 60 40" aria-hidden="true">
+    <g fill="#F4C0D1" stroke="#D4537E" stroke-width=".8">
+      <path d="M30 26 Q14 22 8 12 Q22 10 30 26Z"/>
+      <path d="M30 26 Q46 22 52 12 Q38 10 30 26Z"/>
+      <path d="M30 26 Q18 16 17 5 Q29 8 30 26Z"/>
+      <path d="M30 26 Q42 16 43 5 Q31 8 30 26Z"/>
+    </g>
+    <path d="M30 26 Q26 12 30 3 Q34 12 30 26Z" fill="#ED93B1" stroke="#D4537E" stroke-width=".8"/>
+    <path d="M8 27 Q30 38 52 27 Q30 32 8 27Z" fill="#97C459" stroke="#3B6D11" stroke-width=".8"/>
+  </svg>
+  <div>
+    <h1>Dhamma map</h1>
+    <p id="sub">The path to happiness</p>
+  </div>
+  <svg class="lotus" viewBox="0 0 60 40" aria-hidden="true">
+    <g fill="#F4C0D1" stroke="#D4537E" stroke-width=".8">
+      <path d="M30 26 Q14 22 8 12 Q22 10 30 26Z"/>
+      <path d="M30 26 Q46 22 52 12 Q38 10 30 26Z"/>
+      <path d="M30 26 Q18 16 17 5 Q29 8 30 26Z"/>
+      <path d="M30 26 Q42 16 43 5 Q31 8 30 26Z"/>
+    </g>
+    <path d="M30 26 Q26 12 30 3 Q34 12 30 26Z" fill="#ED93B1" stroke="#D4537E" stroke-width=".8"/>
+    <path d="M8 27 Q30 38 52 27 Q30 32 8 27Z" fill="#97C459" stroke="#3B6D11" stroke-width=".8"/>
+  </svg>
+</header>
+
+<p class="hint" id="hint">Hover or tap any underlined term for its explanation. Click a card’s arrow to turn it over.</p>
+
+<div class="pages" id="pages">
+<div class="page on" id="p1">
+
+<svg viewBox="0 0 160 160" style="display:block;margin:0 auto 4px;width:150px;height:150px" aria-label="The Buddha before a dhamma wheel">
+  <circle cx="80" cy="72" r="54" fill="var(--amber-bg)" stroke="#BA7517" stroke-width="2"/>
+  <g stroke="#BA7517" stroke-width="1.5">
+    <line x1="80" y1="18" x2="80" y2="126"/><line x1="26" y1="72" x2="134" y2="72"/>
+    <line x1="42" y1="34" x2="118" y2="110"/><line x1="118" y1="34" x2="42" y2="110"/>
+  </g>
+  <circle cx="80" cy="72" r="8" fill="#BA7517"/>
+  <g fill="#F5C4B3" stroke="#B34A24" stroke-width="1">
+    <ellipse cx="80" cy="112" rx="29" ry="31"/>
+    <rect x="30" y="130" width="100" height="25" rx="12.5"/>
+    <circle cx="80" cy="76" r="17"/>
+  </g>
+  <ellipse cx="80" cy="128" rx="13" ry="5.5" fill="#F0997B" stroke="#B34A24" stroke-width="1"/>
+  <circle cx="80" cy="58" r="5.5" fill="#F0997B" stroke="#B34A24" stroke-width="1"/>
+</svg>
+
+<svg class="arrow" viewBox="0 0 24 26" aria-hidden="true"><polygon points="8.4,0 15.6,0 15.6,15 20,15 12,26 4,15 8.4,15" fill="#E0518A"/></svg>
+
+<section class="section marks">
+  <h2>Three Marks of Existence</h2>
+  <p class="pali"><button class="t" data-k="tilakkhana">Ti-lakkhaṇa</button> — true of all things</p>
+  <ul>
+    <li><button class="t" data-k="anicca">Anicca</button> — all <button class="t" data-k="sankhata">conditioned things</button> are impermanent</li>
+    <li><button class="t" data-k="dukkha">Dukkha</button> — all conditioned things are unsatisfactory</li>
+    <li><button class="t" data-k="anatta">Anattā</button> — all things are not-self</li>
+  </ul>
+</section>
+
+<svg class="arrow" viewBox="0 0 24 26" aria-hidden="true"><polygon points="8.4,0 15.6,0 15.6,15 20,15 12,26 4,15 8.4,15" fill="#E8622F"/></svg>
+
+<section class="section truths">
+  <h2>The Four Noble Truths</h2>
+  <p class="pali"><button class="t" data-k="saccani">Cattāri Ariyasaccāni</button></p>
+  <ul>
+    <li><button class="t" data-k="t1">Dukkha</button> — there is suffering</li>
+    <li><button class="t" data-k="t2">Samudaya</button> — its origin is craving</li>
+    <li><button class="t" data-k="t3">Nirodha</button> — suffering can cease</li>
+    <li><button class="t" data-k="t4">Magga</button> — the path leading to its cessation</li>
+  </ul>
+</section>
+
+<svg class="arrow" viewBox="0 0 24 26" aria-hidden="true"><polygon points="8.4,0 15.6,0 15.6,15 20,15 12,26 4,15 8.4,15" fill="#6C63E8"/></svg>
+
+<div class="path">
+  <header>
+    <h2>The Noble Eightfold Path</h2>
+    <p><button class="t" data-k="magga">Ariyo Aṭṭhaṅgiko Magga</button> — 8 factors in 3 trainings</p>
+  </header>
+
+  <div class="flip" style="height:250px">
+    <div class="faces">
+      <div class="face front wisdom">
+        <div>
+          <h2>Wisdom</h2>
+          <p class="pali"><button class="t" data-k="panna">Paññā</button> · factors 1–2</p>
+          <ul>
+        <li><button class="t" data-k="p1">Right view</button></li>
+        <li><button class="t" data-k="p2">Right intention</button></li>
+          </ul>
+        </div>
+        <button class="flipto" type="button" aria-label="Wisdom examines the aggregates — turn the card">
+          <svg viewBox="0 0 30 30" aria-hidden="true"><polygon points="3,10.8 15,10.8 15,6.5 27,15 15,23.5 15,19.2 3,19.2" fill="#6C63E8"/></svg>
+          <span>5 Aggregates</span>
+        </button>
+      </div>
+      <div class="face back aggregates">
+        <button class="backbtn" type="button" aria-label="Turn card back">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6.5 3 L2.5 7 L6.5 11"/><path d="M2.5 7h7a4 4 0 0 1 0 8H7"/>
+        </svg>back
+      </button>
+        <h2>5 Aggregates</h2>
+        <p class="pali"><button class="t" data-k="khandha">Pañcakkhandha</button></p>
+        <ul>
+        <li><button class="t" data-k="rupa">Rūpa</button> — form</li>
+        <li><button class="t" data-k="vedana">Vedanā</button> — feeling</li>
+        <li><button class="t" data-k="sanna">Saññā</button> — perception</li>
+        <li><button class="t" data-k="sankhara">Saṅkhāra</button> — volition</li>
+        <li><button class="t" data-k="vinnana">Viññāṇa</button> — consciousness</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="flip" style="height:250px">
+    <div class="faces">
+      <div class="face front conduct">
+        <div>
+          <h2>Ethical conduct</h2>
+          <p class="pali"><button class="t" data-k="sila">Sīla</button> · factors 3–5</p>
+          <ul>
+        <li><button class="t" data-k="p3">Right speech</button></li>
+        <li><button class="t" data-k="p4">Right action</button></li>
+        <li><button class="t" data-k="p5">Right livelihood</button></li>
+          </ul>
+        </div>
+        <button class="flipto" type="button" aria-label="Conduct is practised as the precepts — turn the card">
+          <svg viewBox="0 0 30 30" aria-hidden="true"><polygon points="3,10.8 15,10.8 15,6.5 27,15 15,23.5 15,19.2 3,19.2" fill="#5FA524"/></svg>
+          <span>5 Precepts</span>
+        </button>
+      </div>
+      <div class="face back precepts">
+        <button class="backbtn" type="button" aria-label="Turn card back">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6.5 3 L2.5 7 L6.5 11"/><path d="M2.5 7h7a4 4 0 0 1 0 8H7"/>
+        </svg>back
+      </button>
+        <h2>5 Precepts</h2>
+        <p class="pali"><button class="t" data-k="pancasila">Pañca Sīla</button></p>
+        <ul>
+        <li><button class="t" data-k="s1">No killing</button></li>
+        <li><button class="t" data-k="s2">No stealing</button></li>
+        <li><button class="t" data-k="s3">No sexual misconduct</button></li>
+        <li><button class="t" data-k="s4">No lying</button></li>
+        <li><button class="t" data-k="s5">No intoxicants</button></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="flip" style="height:250px">
+    <div class="faces">
+      <div class="face front calm">
+        <div>
+          <h2>Concentration</h2>
+          <p class="pali"><button class="t" data-k="samadhi">Samādhi</button> · factors 6–8</p>
+          <ul>
+        <li><button class="t" data-k="p6">Right effort</button></li>
+        <li><button class="t" data-k="p7">Right mindfulness</button></li>
+        <li><button class="t" data-k="p8">Right concentration</button></li>
+          </ul>
+        </div>
+        <button class="flipto" type="button" aria-label="The hindrances block concentration — turn the card">
+          <svg viewBox="0 0 30 30" aria-hidden="true">
+        <circle cx="15" cy="15" r="14" fill="var(--red-bg)" stroke="var(--red)" stroke-width="1.6"/>
+        <path transform="translate(14.6 16) scale(0.46)"
+          d="M0.5 21.0 C-5.5 21.0 -10.5 16.6 -11.6 10.6 C-12.6 5.2 -14.8 0.4 -17.6 -3.4
+             C-19.6 -6.2 -15.4 -9.2 -13.4 -6.4 C-12.2 -4.8 -11.2 -3.2 -10.4 -1.8 L-10.4 -9.0
+             C-10.4 -12.6 -5.2 -12.6 -5.2 -9.0 L-5.2 -2.6 L-3.9 -2.6 L-3.9 -15.4
+             C-3.9 -19.0 1.3 -19.0 1.3 -15.4 L1.3 -2.6 L2.6 -2.6 L2.6 -16.6
+             C2.6 -20.2 7.8 -20.2 7.8 -16.6 L7.8 -2.6 L9.1 -2.6 L9.1 -11.8
+             C9.1 -15.2 14.2 -15.2 14.2 -11.8 L14.2 7.4 C14.2 15.0 8.3 21.0 0.5 21.0 Z"
+          fill="var(--red-soft)" stroke="var(--red)" stroke-width="4" stroke-linejoin="round"/>
+      </svg>
+          <span>5 Hindrances</span>
+        </button>
+      </div>
+      <div class="face back hindrances">
+        <button class="backbtn" type="button" aria-label="Turn card back">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6.5 3 L2.5 7 L6.5 11"/><path d="M2.5 7h7a4 4 0 0 1 0 8H7"/>
+        </svg>back
+      </button>
+        <h2>5 Hindrances</h2>
+        <p class="pali"><button class="t" data-k="nivarana">Nīvaraṇa</button></p>
+        <ul>
+        <li><button class="t" data-k="h1">Sensual desire</button></li>
+        <li><button class="t" data-k="h2">Ill-will</button></li>
+        <li><button class="t" data-k="h3">Sloth and torpor</button></li>
+        <li><button class="t" data-k="h4">Restlessness</button></li>
+        <li><button class="t" data-k="h5">Doubt</button></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<svg class="arrow" viewBox="0 0 24 26" aria-hidden="true"><polygon points="8.4,0 15.6,0 15.6,15 20,15 12,26 4,15 8.4,15" fill="#B34A24"/></svg>
+
+<div class="works">
+  <header>
+    <h2>What the path works on</h2>
+    <p>Roots to pull up, fetters to cut, qualities to grow</p>
+  </header>
+
+  <section class="section roots">
+    <h2>Three Unwholesome Roots</h2>
+    <p class="pali"><button class="t" data-k="mula">Akusala-mūla</button> — what every harmful action grows from</p>
+    <ul>
+      <li><button class="t" data-k="lobha">Lobha</button> — greed</li>
+      <li><button class="t" data-k="dosa">Dosa</button> — hatred</li>
+      <li><button class="t" data-k="moha">Moha</button> — delusion</li>
+    </ul>
+  </section>
+
+  <section class="section fetters">
+    <h2>Ten Fetters</h2>
+    <p class="pali"><button class="t" data-k="samyojana">Saṃyojana</button> — what binds to saṃsāra; each stage cuts some</p>
+    <ul>
+      <li><span class="stage">stream-enterer</span><button class="t" data-k="f_1">Self-view</button></li>
+      <li><span class="stage">stream-enterer</span><button class="t" data-k="f_2">Doubt</button></li>
+      <li><span class="stage">stream-enterer</span><button class="t" data-k="f_3">Attachment to rites</button></li>
+      <li><span class="stage">non-returner</span><button class="t" data-k="f_4">Sensual desire</button></li>
+      <li><span class="stage">non-returner</span><button class="t" data-k="f_5">Ill-will</button></li>
+      <li><span class="stage">arahant</span><button class="t" data-k="f_6">Desire for form</button></li>
+      <li><span class="stage">arahant</span><button class="t" data-k="f_7">Desire for formlessness</button></li>
+      <li><span class="stage">arahant</span><button class="t" data-k="f_8">Conceit</button></li>
+      <li><span class="stage">arahant</span><button class="t" data-k="f_9">Restlessness</button></li>
+      <li><span class="stage">arahant</span><button class="t" data-k="f_10">Ignorance</button></li>
+    </ul>
+  </section>
+
+  <div class="flip" style="height:270px">
+    <div class="faces">
+      <div class="face front bvihara">
+        <div>
+          <h2>Four Divine Abodes</h2>
+          <p class="pali"><button class="t" data-k="brahma">Brahmavihāra</button> — boundless qualities to cultivate</p>
+          <ul>
+            <li><button class="t" data-k="metta">Mettā</button> — loving-kindness</li>
+            <li><button class="t" data-k="karuna">Karuṇā</button> — compassion</li>
+            <li><button class="t" data-k="mudita">Muditā</button> — sympathetic joy</li>
+            <li><button class="t" data-k="upekkha">Upekkhā</button> — equanimity</li>
+          </ul>
+        </div>
+        <button class="flipto" type="button" aria-label="See the near and far enemies of each abode">
+          <svg viewBox="0 0 30 30" aria-hidden="true"><polygon points="3,10.8 15,10.8 15,6.5 27,15 15,23.5 15,19.2 3,19.2" fill="#4E7F19"/></svg>
+          <span>Near &amp; far enemies</span>
+        </button>
+      </div>
+      <div class="face back bvihara">
+        <button class="backbtn" type="button" aria-label="Turn card back">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6.5 3 L2.5 7 L6.5 11"/><path d="M2.5 7h7a4 4 0 0 1 0 8H7"/>
+        </svg>back
+      </button>
+        <h2>Near &amp; far enemies</h2>
+        <p class="pali">What imitates each quality, and what opposes it</p>
+        <ul class="enemies">
+          <li class="hd">Divine abode</li>
+          <li class="hd">Near enemy — imitates it</li>
+          <li class="hd">Far enemy — opposes it</li>
+          <li class="q">Mettā</li>
+          <li>Sentimental attachment</li>
+          <li>Ill-will</li>
+          <li class="q">Karuṇā</li>
+          <li>Pity, looking down</li>
+          <li>Cruelty</li>
+          <li class="q">Muditā</li>
+          <li>Exuberance, false cheer</li>
+          <li>Envy</li>
+          <li class="q">Upekkhā</li>
+          <li>Indifference</li>
+          <li>Craving, anxiety</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<svg class="arrow" viewBox="0 0 24 26" aria-hidden="true"><polygon points="8.4,0 15.6,0 15.6,15 20,15 12,26 4,15 8.4,15" fill="#12A87F"/></svg>
+
+<section class="section fruits">
+  <h2>Fruits of the Path</h2>
+  <p class="pali"><button class="t" data-k="phala">Phala</button> — jhāna and the four stages of awakening</p>
+  <ul>
+    <li><button class="t" data-k="jhana">Jhāna</button> — deep absorptions (via samādhi)</li>
+    <li><button class="t" data-k="f1">Sotāpanna</button> — stream-enterer</li>
+    <li><button class="t" data-k="f2">Sakadāgāmi</button> — once-returner</li>
+    <li><button class="t" data-k="f3">Anāgāmi</button> — non-returner</li>
+    <li><button class="t" data-k="f4">Arahant</button> — fully liberated</li>
+  </ul>
+</section>
+
+<svg class="arrow" viewBox="0 0 24 26" aria-hidden="true"><polygon points="8.4,0 15.6,0 15.6,15 20,15 12,26 4,15 8.4,15" fill="#6C63E8"/></svg>
+
+<svg class="bloom" viewBox="0 0 60 40" aria-hidden="true">
+  <g fill="#F4C0D1" stroke="#D4537E" stroke-width=".8">
+    <path d="M30 26 Q14 22 8 12 Q22 10 30 26Z"/>
+    <path d="M30 26 Q46 22 52 12 Q38 10 30 26Z"/>
+    <path d="M30 26 Q18 16 17 5 Q29 8 30 26Z"/>
+    <path d="M30 26 Q42 16 43 5 Q31 8 30 26Z"/>
+  </g>
+  <path d="M30 26 Q26 12 30 3 Q34 12 30 26Z" fill="#ED93B1" stroke="#D4537E" stroke-width=".8"/>
+  <path d="M8 27 Q30 38 52 27 Q30 32 8 27Z" fill="#97C459" stroke="#3B6D11" stroke-width=".8"/>
+</svg>
+
+<div class="goal">
+  <strong>Liberation</strong>
+  <span><button class="t" data-k="nibbana">Nibbāna</button> — end of suffering</span>
+</div>
+
+<p class="legend">Red hand = the hindrances block samādhi</p>
+
+</div>
+
+<div class="page" id="p2">
+
+<svg viewBox="0 0 160 160" style="display:block;margin:0 auto 6px;width:132px;height:132px" aria-label="The wheel of becoming, twelve spokes">
+  <circle cx="80" cy="80" r="56" fill="var(--amber-bg)" stroke="#BA7517" stroke-width="2"/>
+  <g stroke="#BA7517" stroke-width="1.2">
+    <line x1="24.0" y1="80.0" x2="136.0" y2="80.0"/>
+    <line x1="31.5" y1="52.0" x2="128.5" y2="108.0"/>
+    <line x1="52.0" y1="31.5" x2="108.0" y2="128.5"/>
+    <line x1="80.0" y1="24.0" x2="80.0" y2="136.0"/>
+    <line x1="108.0" y1="31.5" x2="52.0" y2="128.5"/>
+    <line x1="128.5" y1="52.0" x2="31.5" y2="108.0"/>
+  </g>
+  <path d="M84.0 42.2 A38.0 38.0 0 0 1 109.1 55.6" fill="none" stroke="#B34A24" stroke-width="2.8" stroke-linecap="round"/>
+  <polygon points="114.6,62.1 112.8,52.5 105.4,58.7" fill="#B34A24"/>
+  <path d="M117.2 72.1 A38.0 38.0 0 0 1 112.2 100.1" fill="none" stroke="#B34A24" stroke-width="2.8" stroke-linecap="round"/>
+  <polygon points="107.7,107.3 116.3,102.7 108.2,97.6" fill="#B34A24"/>
+  <path d="M99.0 112.9 A38.0 38.0 0 0 1 70.8 116.9" fill="none" stroke="#B34A24" stroke-width="2.8" stroke-linecap="round"/>
+  <polygon points="62.6,114.8 69.6,121.5 72.0,112.2" fill="#B34A24"/>
+  <path d="M54.6 108.2 A38.0 38.0 0 0 1 42.1 82.7" fill="none" stroke="#B34A24" stroke-width="2.8" stroke-linecap="round"/>
+  <polygon points="41.5,74.2 37.3,83.0 46.9,82.3" fill="#B34A24"/>
+  <path d="M45.3 64.5 A38.0 38.0 0 0 1 65.8 44.8" fill="none" stroke="#B34A24" stroke-width="2.8" stroke-linecap="round"/>
+  <polygon points="73.6,41.6 64.0,40.3 67.6,49.2" fill="#B34A24"/>
+  <circle cx="80" cy="80" r="8" fill="#BA7517"/>
+</svg>
+<p class="legend" style="margin:0 0 14px">The wheel of dependent origination keeps turning …</p>
+
+<section class="section marks2">
+  <h2>The nature of reality</h2>
+  <p class="pali"><button class="t" data-k="tilakkhana">Ti-lakkhaṇa</button> — three marks stamped on all experience</p>
+  <ul>
+    <li><button class="t" data-k="anicca">Anicca</button> — all <button class="t" data-k="sankhata">saṅkhāra</button> are impermanent</li>
+    <li><button class="t" data-k="dukkha">Dukkha</button> — all saṅkhāra are unsatisfactory</li>
+    <li><button class="t" data-k="anatta">Anattā</button> — all dhammā are not-self</li>
+  </ul>
+</section>
+
+<svg class="arrow" viewBox="0 0 24 26" aria-hidden="true"><polygon points="8.4,0 15.6,0 15.6,15 20,15 12,26 4,15 8.4,15" fill="#6C63E8"/></svg>
+
+<section class="chain">
+  <h2>Dependent origination</h2>
+  <p class="pali"><button class="t" data-k="paticca">Paṭicca-samuppāda</button> — each link conditions the next</p>
+  <ul class="links">
+      <li><span class="n">1</span><button class="t" data-k="L1">Avijjā</button> — ignorance</li>
+      <li><span class="n">2</span><button class="t" data-k="L2">Saṅkhāra</button> — formations</li>
+      <li><span class="n">3</span><button class="t" data-k="L3">Viññāṇa</button> — consciousness</li>
+      <li><span class="n">4</span><button class="t" data-k="L4">Nāmarūpa</button> — mind-body</li>
+      <li><span class="n">5</span><button class="t" data-k="L5">Saḷāyatana</button> — six senses</li>
+      <li><span class="n">6</span><button class="t" data-k="L6">Phassa</button> — contact</li>
+      <li><span class="n">7</span><button class="t" data-k="L7">Vedanā</button> — feeling</li>
+      <li class="key"><span class="n">8</span><button class="t" data-k="L8">Taṇhā</button> — craving</li>
+      <li><span class="n">9</span><button class="t" data-k="L9">Upādāna</button> — clinging</li>
+      <li><span class="n">10</span><button class="t" data-k="L10">Bhava</button> — becoming</li>
+      <li><span class="n">11</span><button class="t" data-k="L11">Jāti</button> — birth</li>
+      <li><span class="n">12</span><button class="t" data-k="L12">Jarāmaraṇa</button> — ageing, death</li>
+  </ul>
+  <p class="loop">↻ Link 12 feeds link 1 again — saṃsāra keeps turning.<br>
+  Taṇhā (highlighted) is the second Noble Truth: the link to cut.</p>
+</section>
+
+<svg class="arrow" viewBox="0 0 24 26" aria-hidden="true"><polygon points="8.4,0 15.6,0 15.6,15 20,15 12,26 4,15 8.4,15" fill="#2C7BC4"/></svg>
+
+<section class="section kamma">
+  <h2>Kamma and Saṃsāra</h2>
+  <p class="pali">Action, its result, and the round of rebirth</p>
+  <ul>
+    <li><button class="t" data-k="kamma">Kamma</button> — intentional action (cetanā)</li>
+    <li><button class="t" data-k="vipaka">Vipāka</button> — its ripening result</li>
+    <li><button class="t" data-k="samsara">Saṃsāra</button> — the round of rebirth</li>
+    <li><button class="t" data-k="punabbhava">Punabbhava</button> — renewed becoming</li>
+  </ul>
+</section>
+
+<svg class="arrow" viewBox="0 0 24 26" aria-hidden="true"><polygon points="8.4,0 15.6,0 15.6,15 20,15 12,26 4,15 8.4,15" fill="#12A87F"/></svg>
+
+<div class="closing">
+  <strong>Seeing this clearly is paññā</strong>
+  <span>One who sees dependent origination sees the Dhamma</span>
+</div>
+
+</div>
+</div>
+
+<nav class="nav">
+  <button class="navbtn ghost" id="prev" type="button" hidden>
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3 L5 8 L10 13"/></svg>Back
+  </button>
+  <span class="pageno" id="pageno">Page 1 of 2</span>
+  <button class="navbtn" id="next" type="button">
+    Next<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3 L11 8 L6 13"/></svg>
+  </button>
+</nav>
+
+
+</div>
+
+<div id="tip" role="tooltip" aria-hidden="true"></div>
+
+<script>
+const G = {
+  mula:["Akusala-mūla — the three roots","Every unwholesome action traces back to one of three. Their opposites — non-greed, non-hatred, non-delusion — are the wholesome roots. Nibbāna is defined as their extinguishing."],
+  lobha:["Lobha — greed","Wanting, grasping, acquisitiveness. Countered directly by generosity (<i>dāna</i>) and renunciation."],
+  dosa:["Dosa — hatred","Aversion in all its forms, from irritation to rage. Countered by mettā."],
+  moha:["Moha — delusion","Not seeing how things are — the root beneath the other two, and the one only wisdom can remove."],
+  samyojana:["Saṃyojana — the ten fetters","The bonds that tie a being to the round of rebirth. The four stages of awakening are defined by exactly which of these have fallen away — that is what makes them stages rather than feelings."],
+  f_1:["Sakkāya-diṭṭhi — self-view","The belief in a real self within the aggregates. Dropped at stream-entry — not as an idea given up, but as something no longer seen."],
+  f_2:["Vicikicchā — doubt","Paralysing uncertainty about the path. Ends at stream-entry because the practitioner has now seen for themselves."],
+  f_3:["Sīlabbata-parāmāsa — attachment to rites","Believing that rules or rituals alone bring liberation. Dropped at stream-entry."],
+  f_4:["Kāmacchanda — sensual desire","Wanting toward sense pleasures. Weakened at once-returner, fully abandoned at non-returner."],
+  f_5:["Byāpāda — ill-will","Aversion. Weakened at once-returner, fully abandoned at non-returner."],
+  f_6:["Rūpa-rāga — desire for form","Attachment to the refined states of the form realm — including the jhānas themselves. Only an arahant is free of it."],
+  f_7:["Arūpa-rāga — desire for formlessness","Attachment to the formless attainments. Also cut only at arahantship."],
+  f_8:["Māna — conceit","Not just pride: the subtle measuring of oneself as better, worse, or equal. It survives almost to the end."],
+  f_9:["Uddhacca — restlessness","A residual subtle agitation of mind, long after coarse restlessness has gone."],
+  f_10:["Avijjā — ignorance","The last fetter, and the first link of dependent origination. When it falls, the chain has nowhere to start."],
+  brahma:["Brahmavihāra","The four 'divine abodes' or boundless states, radiated without limit in all directions. Each has a near enemy that imitates it and a far enemy that opposes it."],
+  metta:["Mettā — loving-kindness","Wishing beings well, without preference. Far enemy: ill-will. Near enemy: sentimental attachment, which looks like love but clings."],
+  karuna:["Karuṇā — compassion","The heart's response to suffering, wishing it eased. Far enemy: cruelty. Near enemy: pity, which looks down."],
+  mudita:["Muditā — sympathetic joy","Gladness at others' good fortune — the hardest of the four for most people. Far enemy: envy."],
+  upekkha:["Upekkhā — equanimity","Even-mindedness that holds steady through praise and blame, gain and loss. Far enemy: anxiety. Near enemy: indifference, which merely looks calm."],
+  paticca:["Paṭicca-samuppāda","Dependent origination: nothing arises on its own. The Buddha said one who sees this sees the Dhamma — it is the mechanism behind the second Noble Truth."],
+  L1:["Avijjā — ignorance","Not knowing the four truths. Not a first cause in time, but the condition that keeps the chain running."],
+  L2:["Saṅkhāra — formations","Volitional activity of body, speech, and mind — kamma being made."],
+  L3:["Viññāṇa — consciousness","Awareness arising at the sense doors, carried forward by past formations."],
+  L4:["Nāmarūpa — mind-body","The psycho-physical organism: name (mental factors) and form (materiality) together."],
+  L5:["Saḷāyatana — six sense bases","Eye, ear, nose, tongue, body, and mind — the six doors through which experience arrives."],
+  L6:["Phassa — contact","The meeting of sense base, object, and consciousness. Nothing is experienced without it."],
+  L7:["Vedanā — feeling","The pleasant, unpleasant, or neutral tone that follows contact. The pivot point of the whole chain."],
+  L8:["Taṇhā — craving","Wanting toward the pleasant, away from the unpleasant. This is the second Noble Truth and the link where the chain can be broken."],
+  L9:["Upādāna — clinging","Craving hardened into grasping: at sense pleasures, views, rites, and the idea of a self."],
+  L10:["Bhava — becoming","The kammic process that sets up continued existence."],
+  L11:["Jāti — birth","The arising of a new existence, conditioned by that becoming."],
+  L12:["Jarāmaraṇa — ageing and death","With it come sorrow, lamentation, pain, grief, and despair. And the whole mass of suffering begins again."],
+  kamma:["Kamma","Intentional action. The Buddha's definition is explicit: it is <i>cetanā</i>, intention, that he calls kamma — not the outward act alone."],
+  vipaka:["Vipāka","The ripening of kamma. Not a moral ledger administered by anyone, but a natural consequence of how actions shape the mind."],
+  samsara:["Saṃsāra","Literally 'wandering on': the round of repeated birth and death, driven by craving and ignorance."],
+  punabbhava:["Punabbhava","Renewed becoming — the continuation of the process into a further existence. Its ending is liberation."],
+  tilakkhana:["Ti-lakkhaṇa","The three characteristics stamped on all experience. Seeing them clearly is what right view is for — they are not doctrines to believe but features to notice."],
+  sankhata:["Saṅkhata — conditioned","Anything that arises because of causes, and therefore must also cease. Nibbāna alone is <i>asaṅkhata</i>, unconditioned — which is why the third mark widens from 'conditioned things' to 'all things'."],
+  anicca:["Anicca","Impermanent. Everything that arises passes away — not only over a lifetime but moment to moment. Grasping at what is changing is what makes it painful."],
+  dukkha:["Dukkha","Unsatisfactory, stressful, not able to bear the weight we put on it. Wider than 'pain': the word covers subtle unease as much as open suffering."],
+  anatta:["Anattā","Not-self. No fixed, owning, controlling self is found in body or mind. The argument in SN 22.59 is about control: if these were 'mine', they would obey."],
+
+  saccani:["Cattāri Ariyasaccāni","The Buddha's first teaching after awakening, given at Sarnath. Each truth carries a task: understand suffering, abandon craving, realise cessation, develop the path."],
+  t1:["Dukkha — there is suffering","Birth, ageing, illness, death, separation from what is loved, contact with what is not, not getting what one wants. In brief: the five clinging-aggregates."],
+  t2:["Samudaya — its origin","Craving (<i>taṇhā</i>) — for sense pleasure, for existence, for non-existence. Craving is what keeps the round of becoming turning."],
+  t3:["Nirodha — cessation","The complete fading and letting go of that craving. This truth is nibbāna, stated as a possibility rather than a place."],
+  t4:["Magga — the path","The Noble Eightfold Path: the way of practice leading to that cessation. The fourth truth is the whole of what follows below."],
+
+  magga:["Ariyo Aṭṭhaṅgiko Magga","Eight factors, cultivated together rather than in sequence. They sort into three trainings: wisdom, ethical conduct, and concentration."],
+  panna:["Paññā — wisdom","Discernment: seeing how things actually are. Placed first because right view reorients everything after it — but it also deepens as the other factors mature."],
+  p1:["Right view — sammā-diṭṭhi","Understanding the four truths, and that actions have consequences. Mundane right view supports good rebirth; supramundane right view sees dependent origination directly."],
+  p2:["Right intention — sammā-saṅkappa","What the mind inclines toward: renunciation instead of grasping, goodwill instead of ill-will, harmlessness instead of cruelty. Grouped under wisdom because it is the will responding to right view."],
+  sila:["Sīla — ethical conduct","Virtue as a training, not a commandment. Its function is practical: a mind free of remorse can settle, so sīla is the ground concentration grows in."],
+  p3:["Right speech — sammā-vācā","Abstaining from lying, divisive speech, harsh speech, and idle chatter. The positive form: speak what is true, timely, gentle, and useful."],
+  p4:["Right action — sammā-kammanta","Abstaining from killing, taking what is not given, and sexual misconduct — the bodily counterpart of right speech."],
+  p5:["Right livelihood — sammā-ājīva","Earning a living without harm. The suttas name five trades to avoid: weapons, human beings, meat, intoxicants, and poisons."],
+  samadhi:["Samādhi — concentration","Collectedness: the mind gathered and unified rather than scattered. Not trance — a bright, workable steadiness that wisdom can act from."],
+  p6:["Right effort — sammā-vāyāma","Four efforts: prevent unwholesome states not yet arisen, abandon those arisen, arouse wholesome states, and maintain those already there."],
+  p7:["Right mindfulness — sammā-sati","The four foundations: mindfulness of body, feelings, mind, and mental objects — knowing what is present without adding to it."],
+  p8:["Right concentration — sammā-samādhi","Defined in the suttas as the four jhānas: successively deeper states of collected, settled attention."],
+
+  khandha:["Pañcakkhandha","The five heaps that make up any moment of experience. The Buddha's answer to 'what is a person?' is this list — and none of the five is a self."],
+  rupa:["Rūpa — form","Physical form: the body and material experience, described through the four elements of solidity, cohesion, heat, and motion."],
+  vedana:["Vedanā — feeling","The pleasant, unpleasant, or neutral tone of any experience. Not emotion — the raw affective quality that arises before reaction."],
+  sanna:["Saññā — perception","Recognition and labelling: matching present experience to past impressions, so a shape becomes 'tree'. Once labelled, craving or aversion tends to follow the label."],
+  sankhara:["Saṅkhāra — volition","The intentional, kamma-forming activities of mind: intention, attention, mental states wholesome and unwholesome. Also called 'mental formations'."],
+  vinnana:["Viññāṇa — consciousness","Bare knowing at each sense door — seeing, hearing, smelling, tasting, touching, and cognising. It arises dependent on conditions; it is not a soul passing through."],
+
+  pancasila:["Pañca Sīla","The five training rules undertaken voluntarily by lay practitioners. The Pali is a resolve — 'I undertake the training' — rather than a prohibition handed down."],
+  s1:["No killing — pāṇātipātā","Abstaining from taking life, extended in practice to harmlessness toward all beings."],
+  s2:["No stealing — adinnādānā","Abstaining from taking what is not given, including deception and misuse of what is entrusted."],
+  s3:["No sexual misconduct — kāmesu micchācārā","Abstaining from sexual behaviour that causes harm or betrays trust and commitments."],
+  s4:["No lying — musāvādā","Abstaining from false speech. Traditionally treated as the gravest of the five, since it corrupts everything built on trust."],
+  s5:["No intoxicants — surāmeraya","Abstaining from drink and drugs that cause heedlessness — because they erode the mindfulness the other four rest on."],
+
+  nivarana:["Nīvaraṇa","The five obstacles to a settled mind. The classic similes compare them to water that is coloured, boiling, choked with weeds, wind-stirred, or muddy — in each case you cannot see your reflection."],
+  h1:["Sensual desire — kāmacchanda","Wanting toward sights, sounds, tastes, touches. The mind leans out toward objects instead of settling."],
+  h2:["Ill-will — byāpāda","Aversion, irritation, resentment. Countered by mettā, the deliberate cultivation of goodwill."],
+  h3:["Sloth and torpor — thīna-middha","Dullness and heaviness of mind and body. Countered by rousing energy, light, and interest."],
+  h4:["Restlessness and worry — uddhacca-kukkucca","Agitation and remorse over what was done or left undone. Sīla addresses this at its root."],
+  h5:["Doubt — vicikicchā","Not honest questioning, but the paralysing uncertainty that stops practice before it begins."],
+
+  phala:["Phala — fruit","What the path yields. Each stage of awakening has a moment of path (<i>magga</i>) and its fruit (<i>phala</i>)."],
+  jhana:["Jhāna","Deep meditative absorption, usually described in four stages, the hindrances suppressed. The Buddha called it a pleasure not to be feared."],
+  f1:["Sotāpanna — stream-enterer","The first stage. Three fetters fall away: self-view, doubt, and attachment to rites. No more than seven lives remain, and no rebirth below the human realm."],
+  f2:["Sakadāgāmi — once-returner","Greed and hatred are much weakened. At most one more return to this world."],
+  f3:["Anāgāmi — non-returner","Sensual desire and ill-will are fully abandoned. Not reborn in this realm again."],
+  f4:["Arahant","All ten fetters cut, all craving gone, the work done. The classic phrase: what had to be done has been done."],
+  nibbana:["Nibbāna","Literally 'extinguishing' — the going out of the fires of greed, hatred, and delusion. Unconditioned and deathless, yet still not-self: it is not a soul or a heaven, and no one owns it."]
+};
+
+const tip = document.getElementById('tip');
+let current = null;
+
+function show(el){
+  const g = G[el.dataset.k];
+  if(!g) return;
+  tip.innerHTML = '<b>'+g[0]+'</b>'+g[1];
+  tip.classList.add('on');
+  tip.setAttribute('aria-hidden','false');
+  current = el;
+  place(el);
+}
+function place(el){
+  const r = el.getBoundingClientRect();
+  const t = tip.getBoundingClientRect();
+  const pad = 10;
+  let left = r.left + r.width/2 - t.width/2;
+  left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+  let top = r.top - t.height - 9;
+  if(top < pad) top = r.bottom + 9;
+  tip.style.left = left+'px';
+  tip.style.top = top+'px';
+}
+function hide(){
+  tip.classList.remove('on');
+  tip.setAttribute('aria-hidden','true');
+  current = null;
+}
+
+document.querySelectorAll('.t').forEach(el=>{
+  el.setAttribute('type','button');
+  el.addEventListener('mouseenter',()=>show(el));
+  el.addEventListener('mouseleave',hide);
+  el.addEventListener('focus',()=>show(el));
+  el.addEventListener('blur',hide);
+  el.addEventListener('click',e=>{
+    e.stopPropagation();
+    current===el ? hide() : show(el);
+  });
+});
+
+document.querySelectorAll('.flip').forEach(card=>{
+  const set=v=>{ card.classList.toggle('open',v); };
+  card.querySelector('.flipto').addEventListener('click',e=>{e.stopPropagation(); hide(); set(true);});
+  card.querySelector('.backbtn').addEventListener('click',e=>{e.stopPropagation(); hide(); set(false);});
+});
+
+
+const pages=[document.getElementById('p1'),document.getElementById('p2')];
+const pagesBox=document.getElementById('pages');
+const subs=['The path to happiness','The nature of reality'];
+const next=document.getElementById('next'), prev=document.getElementById('prev');
+const pageno=document.getElementById('pageno'), sub=document.getElementById('sub');
+const hint=document.getElementById('hint');
+const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+let pg=0, busy=false;
+
+function chrome(n){
+  sub.textContent=subs[n];
+  pageno.textContent='Page '+(n+1)+' of 2';
+  prev.hidden = n===0;
+  next.hidden = n===pages.length-1;
+  hint.style.display = n===0 ? '' : 'none';
+}
+
+function go(n,dir){
+  if(busy || n===pg || n<0 || n>=pages.length) return;
+  hide();
+  dir = dir || (n>pg ? 1 : -1);
+  const out=pages[pg], inn=pages[n];
+
+  if(reduce){
+    out.classList.remove('on'); inn.classList.add('on');
+    pg=n; chrome(n); window.scrollTo({top:0}); return;
+  }
+
+  busy=true;
+  const h=pagesBox.offsetHeight;
+  pagesBox.style.minHeight=h+'px';
+
+  out.style.setProperty('--to', (dir>0?-40:40)+'px');
+  inn.style.setProperty('--from',(dir>0?60:-60)+'px');
+
+  out.classList.remove('on'); out.classList.add('leaving');
+  inn.classList.add('on','anim');
+  pg=n; chrome(n);
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  const done=()=>{
+    out.classList.remove('leaving');
+    inn.classList.remove('anim');
+    out.style.transform=''; inn.style.transform='';
+    pagesBox.style.minHeight='';
+    busy=false;
+  };
+  inn.addEventListener('animationend',done,{once:true});
+  setTimeout(done,420);
+}
+next.addEventListener('click',e=>{e.stopPropagation(); go(pg+1,1);});
+prev.addEventListener('click',e=>{e.stopPropagation(); go(pg-1,-1);});
+
+
+/* --- swipe navigation --- */
+(function(){
+  const area = document.querySelector('.wrap');
+  let x0=null, y0=null, t0=0, tracking=false, dragging=false;
+  const interactive = el => el && el.closest('button, a, input, textarea, select, #tip');
+  const cur = () => pages[pg];
+  const canGo = dx => (dx<0 && pg<pages.length-1) || (dx>0 && pg>0);
+
+  function reset(){
+    const p=cur();
+    p.style.transition='transform .22s ease, opacity .22s ease';
+    p.style.transform=''; p.style.opacity='';
+    setTimeout(()=>{ p.style.transition=''; },230);
+    pagesBox.classList.remove('dragging');
+    dragging=false;
+  }
+
+  area.addEventListener('touchstart', e=>{
+    if(busy || e.touches.length!==1){ tracking=false; return; }
+    const t=e.touches[0];
+    x0=t.clientX; y0=t.clientY; t0=Date.now(); tracking=true;
+  }, {passive:true});
+
+  area.addEventListener('touchmove', e=>{
+    if(!tracking) return;
+    const t=e.touches[0];
+    const dx=t.clientX-x0, dy=t.clientY-y0;
+    if(!dragging){
+      if(Math.abs(dy) > Math.abs(dx)){ tracking=false; return; }
+      if(Math.abs(dx) < 12) return;
+      dragging=true;
+      pagesBox.classList.add('dragging');
+      cur().style.transition='none';
+    }
+    // resist at the ends
+    const damp = canGo(dx) ? 1 : 0.28;
+    const p=cur();
+    p.style.transform='translateX('+(dx*damp)+'px)';
+    p.style.opacity = String(Math.max(.45, 1 - Math.abs(dx)*damp/480));
+  }, {passive:true});
+
+  area.addEventListener('touchend', e=>{
+    if(!tracking) return;
+    tracking=false;
+    const t=e.changedTouches[0];
+    const dx=t.clientX-x0, dy=t.clientY-y0, dt=Date.now()-t0;
+    const fast = dt<300 && Math.abs(dx)>35;
+    const far  = Math.abs(dx)>70;
+
+    if(dragging){
+      const p=cur();
+      p.style.transition=''; p.style.transform=''; p.style.opacity='';
+      pagesBox.classList.remove('dragging'); dragging=false;
+    }
+    if(interactive(e.target)) return;
+    if(Math.abs(dy)>60) return;
+    if(!(fast||far)) return;
+    if(dx<0) go(pg+1,1); else go(pg-1,-1);
+  }, {passive:true});
+
+  area.addEventListener('touchcancel',()=>{ if(dragging) reset(); tracking=false; }, {passive:true});
+
+  document.addEventListener('keydown', e=>{
+    if(interactive(document.activeElement)) return;
+    if(e.key==='ArrowRight') go(pg+1,1);
+    if(e.key==='ArrowLeft')  go(pg-1,-1);
+  });
+})();
+
+
+/* --- trackpad / horizontal wheel navigation --- */
+(function(){
+  const box = document.querySelector('.wrap');
+  let acc=0, idle=null, locked=false, live=false;
+
+  function settle(commit){
+    const p = pages[pg];
+    if(live){
+      p.style.transition='transform .2s ease, opacity .2s ease';
+      p.style.transform=''; p.style.opacity='';
+      setTimeout(()=>{ p.style.transition=''; },210);
+      live=false;
+    }
+    if(commit) go(commit>0 ? pg+1 : pg-1, commit>0 ? 1 : -1);
+    acc=0;
+  }
+
+  box.addEventListener('wheel', e=>{
+    // only care about deliberate horizontal scrolling
+    if(Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+    if(busy) return;
+
+    // stop the browser treating it as a back/forward gesture
+    e.preventDefault();
+
+    if(locked) return;
+
+    acc += e.deltaX;
+    const canGo = (acc>0 && pg<pages.length-1) || (acc<0 && pg>0);
+    const damp = canGo ? 1 : 0.25;
+
+    // follow the gesture
+    const p = pages[pg];
+    if(!live){ p.style.transition='none'; live=true; }
+    const shift = -acc * 0.55 * damp;
+    p.style.transform = 'translateX('+shift+'px)';
+    p.style.opacity = String(Math.max(.5, 1 - Math.abs(shift)/460));
+
+    clearTimeout(idle);
+
+    if(canGo && Math.abs(acc) > 110){
+      locked = true;
+      const dir = acc>0 ? 1 : -1;
+      settle(dir);
+      // wait for trackpad momentum to die down before allowing another turn
+      const unlock = ()=>{ locked=false; acc=0; };
+      clearTimeout(idle); idle=setTimeout(unlock, 700);
+      return;
+    }
+
+    idle = setTimeout(()=>settle(0), 140);
+  }, {passive:false});
+})();
+
+document.addEventListener('click',hide);
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') hide(); });
+window.addEventListener('scroll',()=>{ if(current) place(current); },{passive:true});
+window.addEventListener('resize',()=>{ if(current) place(current); });
+</script>
+</body>
+</html>

@@ -21,3 +21,8 @@ prisma/*.db
 # Misc
 *.log
 .vercel
+*.pem
+*.tsbuildinfo
+next-env.d.ts
+/coverage
+/build

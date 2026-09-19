@@ -10,6 +10,11 @@ export default defineConfig({
     seed: "tsx prisma/seed.ts",
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    // In production, Supabase's Vercel integration sets POSTGRES_URL_NON_POOLING
+    // (a direct, non-pooled connection) — migrations need this rather than the
+    // pooled POSTGRES_PRISMA_URL, since pgbouncer's transaction-pooling mode
+    // doesn't reliably support the operations migrations perform. Locally,
+    // there's just one Postgres instance, so DATABASE_URL covers both.
+    url: process.env["POSTGRES_URL_NON_POOLING"] ?? process.env["DATABASE_URL"],
   },
 });

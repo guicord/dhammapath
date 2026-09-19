@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum DifficultyLevel {
+  foundational
+  intermediate
+  advanced
+}
+
+enum RelationshipType {
+  related
+  prerequisite
+  derives_from
+}
+
+enum SourceType {
+  sutta
+  commentary
+  translation
+  other
+}
+
+model Concept {
+  id              String          @id @default(uuid())
+  slug            String          @unique
+  title           String
+  paliTerm        String?         @map("pali_term")
+  translation     String?
+  shortSummary    String          @map("short_summary")
+  explanation     String
+  category        String
+  difficultyLevel DifficultyLevel @map("difficulty_level")
+  tags            String[]
+  mapNodeId       String?         @unique @map("map_node_id")
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
+
+  sources           Source[]
+  relationshipsFrom ConceptRelationship[] @relation("FromConcept")
+  relationshipsTo   ConceptRelationship[] @relation("ToConcept")
+
+  @@index([category])
+  @@map("concepts")
+}
+
+model ConceptRelationship {
+  id               String           @id @default(uuid())
+  fromConceptId    String           @map("from_concept_id")
+  toConceptId      String           @map("to_concept_id")
+  relationshipType RelationshipType @map("relationship_type")
+
+  fromConcept Concept @relation("FromConcept", fields: [fromConceptId], references: [id], onDelete: Cascade)
+  toConcept   Concept @relation("ToConcept", fields: [toConceptId], references: [id], onDelete: Cascade)
+
+  @@unique([fromConceptId, toConceptId, relationshipType])
+  @@index([fromConceptId])
+  @@index([toConceptId])
+  @@map("concept_relationships")
+}
+
+model Source {
+  id          String     @id @default(uuid())
+  conceptId   String     @map("concept_id")
+  title       String
+  url         String
+  attribution String
+  sourceType  SourceType @map("source_type")
+
+  concept Concept @relation(fields: [conceptId], references: [id], onDelete: Cascade)
+
+  @@index([conceptId])
+  @@map("sources")
+}

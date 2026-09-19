@@ -1,11 +1,12 @@
 import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../lib/generated/prisma/client';
+import { getPoolConfig } from '../lib/content/dbConnection';
 import { seedConcepts, seedRelationships, seedSources } from '../content/dhamma-concepts';
 
 // POSTGRES_URL_NON_POOLING (direct, set by Supabase's Vercel integration) is
 // preferred for admin operations like seeding; local dev falls back to DATABASE_URL.
-const adapter = new PrismaPg({ connectionString: process.env.POSTGRES_URL_NON_POOLING ?? process.env.DATABASE_URL });
+const adapter = new PrismaPg(getPoolConfig(process.env.POSTGRES_URL_NON_POOLING, process.env.DATABASE_URL));
 const prisma = new PrismaClient({ adapter });
 
 async function main() {

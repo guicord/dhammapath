@@ -3,6 +3,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import styles from "./MapExperience.module.css";
 import { seedConcepts } from "@/content/dhamma-concepts";
+import { sanitizeInlineHtml } from "@/lib/content/sanitizeInlineHtml";
 import {
   LotusIcon,
   ArrowIcon,
@@ -17,12 +18,6 @@ import {
 } from "./icons";
 
 const conceptByMapNodeId = new Map(seedConcepts.map((c) => [c.mapNodeId, c]));
-
-/** Content is first-party authored (content/dhamma-concepts.ts), not user input;
- * this just guards against a stray unclosed tag reaching the DOM via innerHTML. */
-function sanitizeInlineHtml(html: string): string {
-  return html.replace(/<(?!\/?(i|em|b)\b)[^>]*>/gi, "");
-}
 
 function Term({ k, children }: { k: string; children: ReactNode }) {
   return (

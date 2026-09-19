@@ -1,0 +1,149 @@
+.backLink {
+  display: inline-block;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: underline;
+}
+.backLink:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.header {
+  border: 1px solid;
+  border-radius: 14px;
+  padding: 20px 22px;
+  margin-bottom: 24px;
+}
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.badge {
+  display: inline-block;
+  border: 1px solid;
+  border-radius: 999px;
+  padding: 3px 11px;
+  font-size: 12px;
+  font-style: italic;
+}
+.difficultyBadge {
+  display: inline-block;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 3px 11px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.15;
+}
+.subtitle {
+  margin: 6px 0 0;
+  font-size: 15px;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.section {
+  margin-bottom: 28px;
+}
+.section h2 {
+  margin: 0 0 10px;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.summary {
+  font-size: 18px;
+  line-height: 1.5;
+  font-weight: 600;
+  margin: 0 0 12px;
+}
+.explanation {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+.explanation i {
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.relatedGroup {
+  margin-bottom: 16px;
+}
+.relatedGroup:last-child {
+  margin-bottom: 0;
+}
+.relatedGroup h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.relatedList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.relatedLink {
+  display: inline-block;
+  border: 1px solid var(--violet-line);
+  background: var(--violet-bg);
+  color: var(--violet-ink);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 14px;
+  text-decoration: none;
+}
+.relatedLink:hover,
+.relatedLink:focus-visible {
+  text-decoration: underline;
+}
+.relatedLink:focus-visible {
+  outline: 2px solid var(--violet-ink);
+  outline-offset: 2px;
+}
+
+.sourceList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sourceItem {
+  padding: 10px 0;
+  border-top: 1px solid var(--rule);
+}
+.sourceItem:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+.sourceTitle {
+  font-weight: 600;
+  text-decoration: underline;
+}
+.sourceMeta {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+}
+.sourcesPlaceholder {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+  font-style: italic;
+}

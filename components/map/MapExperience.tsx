@@ -17,7 +17,9 @@ import {
   WheelOfBecomingIllustration,
 } from "./icons";
 
-const conceptByMapNodeId = new Map(seedConcepts.map((c) => [c.mapNodeId, c]));
+const conceptByMapNodeId = new Map(
+  seedConcepts.filter((c) => c.mapNodeId).map((c) => [c.mapNodeId as string, c]),
+);
 
 function Term({ k, children }: { k: string; children: ReactNode }) {
   return (

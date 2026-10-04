@@ -5,7 +5,9 @@
  *
  * `mapNodeId` is the literal `data-k` value from the original prototype
  * (input/dhamma-map.html) — map JSX references concepts by this id so it
- * never needs to change if `slug` (the public URL id) is renamed.
+ * never needs to change if `slug` (the public URL id) is renamed. It's
+ * optional: a concept can exist (with a working detail page) without being
+ * wired into the curated map yet — see story 12.
  */
 
 export type DifficultyLevel = 'foundational' | 'intermediate' | 'advanced';
@@ -14,7 +16,7 @@ export type SourceType = 'sutta' | 'commentary' | 'translation' | 'other';
 
 export interface SeedConcept {
   slug: string;
-  mapNodeId: string;
+  mapNodeId?: string;
   title: string;
   paliTerm?: string;
   translation?: string;
@@ -38,6 +40,26 @@ export interface SeedSource {
   attribution: string;
   sourceType: SourceType;
 }
+
+// ---------------------------------------------------------------------------
+// Dhamma — not part of the original prototype's map (no mapNodeId), added
+// directly to the content database to demonstrate story 12: new concepts get
+// a working detail page without touching the curated map at all.
+// ---------------------------------------------------------------------------
+const dhammaConcept: SeedConcept[] = [
+  {
+    slug: 'dhamma',
+    title: 'Dhamma',
+    paliTerm: 'Dhamma',
+    translation: 'The teaching / the nature of things',
+    shortSummary: "The Buddha's teaching, and the nature of reality that teaching describes.",
+    explanation:
+      "The Buddha's teaching, and the nature of reality that teaching describes. The word carries both senses at once: Dhamma is what the Buddha taught, and Dhamma is how things actually are — phenomena arising and passing according to their own nature, true whether or not a Buddha appears to point it out. Taking refuge in the Dhamma means trusting both the teaching and the reality it reveals.",
+    category: 'nature-of-reality',
+    difficultyLevel: 'foundational',
+    tags: ['dhamma'],
+  },
+];
 
 // ---------------------------------------------------------------------------
 // Three Marks of Existence (nature-of-reality)
@@ -1152,6 +1174,7 @@ const liberationAndAwakening: SeedConcept[] = [
 ];
 
 export const seedConcepts: SeedConcept[] = [
+  ...dhammaConcept,
   ...threeMarks,
   ...dependentOrigination,
   ...fourNobleTruths,
@@ -1173,6 +1196,12 @@ export const seedConcepts: SeedConcept[] = [
 // merged into one concept, preserving the doctrinal nuance of each context.
 // ---------------------------------------------------------------------------
 export const seedRelationships: SeedRelationship[] = [
+  // Dhamma — the overarching teaching, related to its core expressions
+  { from: 'dhamma', to: 'four-noble-truths', type: 'related' },
+  { from: 'dhamma', to: 'noble-eightfold-path', type: 'related' },
+  { from: 'dhamma', to: 'three-marks-of-existence', type: 'related' },
+  { from: 'dhamma', to: 'dependent-origination', type: 'related' },
+
   // Three Marks — heading to members
   { from: 'three-marks-of-existence', to: 'anicca', type: 'related' },
   { from: 'three-marks-of-existence', to: 'dukkha-unsatisfactoriness', type: 'related' },

@@ -41,16 +41,26 @@ Every deploy: generates the Prisma client, applies any pending migrations, **re-
 
 ## Deploy workflow
 
-**Deploys are manual, not automatic.** `vercel git connect` was attempted to wire up deploy-on-push, but it fails via CLI with an unhelpful generic error, and `vercel project inspect` doesn't surface Git connection status to confirm either way. Rather than keep debugging an opaque CLI/dashboard mismatch, we settled on manual deploys as the known-working path:
+**Git-push auto-deploy is working.** Pushing to `main` on GitHub triggers a Vercel deployment automatically — no manual step needed. (If this ever silently stops working again: the root cause last time was that Vercel's GitHub App had never actually been *installed* on the `guicord` GitHub account at all — a prior OAuth identity authorization looked similar but wasn't the same thing, and caused `vercel git connect` to fail with an unhelpful generic error every time. Check **https://github.com/settings/installations** for a "Vercel" entry — if it's missing, install it at **https://github.com/apps/vercel**, grant access to `guicord/dhammapath`, then re-run `vercel git connect` once.)
+
+Manual deploys still work the same way when needed (e.g. to force a rebuild without a new commit):
 
 ```bash
 cd /Users/gc/Dev/DhammaPath
 npx vercel --prod
 ```
 
-Takes ~3 minutes (install → generate → migrate → seed → build → deploy). Run this after pushing any commit you want live.
+Takes ~3 minutes (install → generate → migrate → seed → build → deploy).
 
-Revisiting true git-push auto-deploy is a cheap future check (one dashboard page: `https://vercel.com/guicord/dhammapath/settings/git`) — not urgent, deferred for now.
+### Known gotcha: Supabase free-tier auto-pause
+
+Supabase's free tier pauses a project after a period of inactivity. A paused project makes every build fail at the migrate/seed step with a Supavisor error like:
+
+```
+FATAL: (ENOTFOUND) tenant/user postgres.<project-ref> not found
+```
+
+This is easy to mistake for a connection-config bug (it looks similar to the TLS issue above) — it isn't. Open the project in the Supabase dashboard (sometimes this alone resumes it; sometimes it takes a minute to fully come back) and retry the deployment. The project list at **https://supabase.com/dashboard/projects** shows pause status most reliably if the individual project page doesn't make it obvious.
 
 ## Verifying a deployment
 

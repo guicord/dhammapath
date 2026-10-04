@@ -42,13 +42,16 @@ export interface SeedSource {
 }
 
 // ---------------------------------------------------------------------------
-// Dhamma — not part of the original prototype's map (no mapNodeId), added
-// directly to the content database to demonstrate story 12: new concepts get
-// a working detail page without touching the curated map at all.
+// Dhamma — not part of the original prototype's tooltip dictionary, added
+// directly to the content database (story 12: a new concept gets a working
+// detail page without touching the map's structure). mapNodeId:'dhamma' only
+// wires up the word "Dhamma" in the masthead title as a term; it isn't part
+// of the thematic flow sections like the prototype's original terms.
 // ---------------------------------------------------------------------------
 const dhammaConcept: SeedConcept[] = [
   {
     slug: 'dhamma',
+    mapNodeId: 'dhamma',
     title: 'Dhamma',
     paliTerm: 'Dhamma',
     translation: 'The teaching / the nature of things',

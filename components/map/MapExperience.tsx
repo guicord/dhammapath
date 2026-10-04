@@ -419,7 +419,9 @@ export function MapExperience() {
       <header className={styles.masthead}>
         <LotusIcon className={styles.lotus} />
         <div>
-          <h1>Dhamma map</h1>
+          <h1>
+            <Term k="dhamma">Dhamma</Term> map
+          </h1>
           <p ref={subRef}>The path to happiness</p>
         </div>
         <LotusIcon className={styles.lotus} />

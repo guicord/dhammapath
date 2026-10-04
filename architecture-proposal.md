@@ -52,8 +52,10 @@ Five layers from PRD §6, mapped onto concrete components:
 | Styling | CSS Modules + CSS variables | Matches the prototype's hand-authored CSS; no heavy design-system dependency that would fight the curated look |
 | Database | PostgreSQL (Supabase-hosted) | Relational model fits concept graph + relational progress/quiz data; Supabase bundles Postgres + Auth |
 | Auth | Supabase Auth | Free-tier email/password login satisfies stories 10/11 with no custom auth code |
-| ORM/query layer | Prisma (or Drizzle) | Typed schema shared between seed scripts, route handlers, and migrations |
-| Hosting | Vercel (app) + Supabase (DB/Auth) | Matches PRD §6 recommended stack; minimal ops |
+| ORM/query layer | Prisma 7, via `@prisma/adapter-pg` driver adapter | Typed schema shared between seed scripts, route handlers, and migrations. Prisma 7 requires a driver adapter rather than its traditional binary query engine; see `DEPLOYMENT.md` for the Supabase-specific TLS workaround this required |
+| Hosting | Vercel (app) + Supabase (DB, via its native "Connect to Vercel" integration) | Matches PRD §6 recommended stack; minimal ops |
+
+As-built specifics (exact env var names, the build pipeline, the deploy workflow, a TLS gotcha worth knowing before touching the database connection code again) are in `DEPLOYMENT.md` — this document stays at the level of intent and doesn't track implementation details that may shift.
 
 ## 4. Data model
 

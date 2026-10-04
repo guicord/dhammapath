@@ -48,3 +48,4 @@ Visit `http://localhost:3000` for the map; click "Read more →" in any tooltip 
 - `architecture-proposal.md` — full architecture
 - `product-requirements.md`, `stories/` — product requirements and the 15 user stories
 - `~/.claude/plans/quiet-brewing-boot.md` — the detailed Milestone 1 implementation plan
+- `DEPLOYMENT.md` — live URL, Supabase/Vercel wiring, and deploy workflow (added after this milestone; local dev above is unaffected by any of it)

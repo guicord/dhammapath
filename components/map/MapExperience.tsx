@@ -157,7 +157,6 @@ export function MapExperience() {
       pageno!.textContent = `Page ${n + 1} of 2`;
       prev!.hidden = n === 0;
       next!.hidden = n === pages.length - 1;
-      hint!.style.display = n === 0 ? "" : "none";
     }
 
     function go(n: number, dir?: number) {
@@ -423,12 +422,18 @@ export function MapExperience() {
             <Term k="dhamma">Dhamma</Term> map
           </h1>
           <p ref={subRef}>The path to happiness</p>
+          <p className={styles.framing}>
+            This map traces core teachings of the Theravāda Buddhist tradition as a structured overview — not a
+            complete course. Dhamma means the Buddha&rsquo;s teaching, and the nature of reality that teaching
+            describes.
+          </p>
         </div>
         <LotusIcon className={styles.lotus} />
       </header>
 
       <p className={styles.hint} ref={hintRef}>
-        Hover or tap any underlined term for its explanation. Click a card&rsquo;s arrow to turn it over.
+        Underlined terms (like Dhamma, above) show a definition on hover or tap. The arrows between sections mark
+        the order to read them. A card with an arrow icon flips over on click for more.
       </p>
 
       <div className={styles.pages} ref={pagesBoxRef}>

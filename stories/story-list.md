@@ -19,6 +19,11 @@
 13. Maintain the curated design while scaling content
 14. Study content in context
 15. Learn at a sustainable pace
+16. Understand what this map is before diving in
+17. See what's foundational before going deeper
+18. See where a concept fits in the bigger picture
+19. Look up a concept by name
+20. Know what to do next after finishing the map
 
 ## Story files
 - [story-01-explore-concept-map.md](stories/story-01-explore-concept-map.md)
@@ -36,3 +41,8 @@
 - [story-13-maintain-the-curated-design-while-scaling-content.md](stories/story-13-maintain-the-curated-design-while-scaling-content.md)
 - [story-14-study-content-in-context.md](stories/story-14-study-content-in-context.md)
 - [story-15-learn-at-a-sustainable-pace.md](stories/story-15-learn-at-a-sustainable-pace.md)
+- [story-16-understand-what-this-map-is-before-diving-in.md](stories/story-16-understand-what-this-map-is-before-diving-in.md)
+- [story-17-see-whats-foundational-before-going-deeper.md](stories/story-17-see-whats-foundational-before-going-deeper.md)
+- [story-18-see-where-a-concept-fits-in-the-bigger-picture.md](stories/story-18-see-where-a-concept-fits-in-the-bigger-picture.md)
+- [story-19-look-up-a-concept-by-name.md](stories/story-19-look-up-a-concept-by-name.md)
+- [story-20-know-what-to-do-next-after-finishing-the-map.md](stories/story-20-know-what-to-do-next-after-finishing-the-map.md)
